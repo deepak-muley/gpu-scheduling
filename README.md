@@ -9,7 +9,7 @@ Two teams share one pool:
 | team-a | 2 | yes |
 | team-b | 2 | yes |
 
-How those queues divide CPUs and GPUs, and what `cpu: -1` means, is in [docs/queues.md](docs/queues.md). Other ways to ask for a GPU (a memory size, a share of several devices, compute mode, DRA) are in [docs/mechanisms.md](docs/mechanisms.md).
+How those queues divide CPUs and GPUs, and what `cpu: -1` means, is in [docs/queues.md](docs/queues.md). Other ways to ask for a GPU (a memory size, a share of several devices, compute mode, DRA) are in [docs/mechanisms.md](docs/mechanisms.md). MIG profiles are in [docs/mig.md](docs/mig.md).
 
 The demo checks three things:
 

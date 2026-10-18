@@ -59,7 +59,7 @@ Two more limits, both checked on this cluster:
 
 | Mechanism | Why it is not in this lab |
 | --- | --- |
-| MIG | These devices are Tesla-K80s. MIG starts at A100-class GPUs, and the fake plugin does not publish `mig.nvidia.com`. |
+| MIG | The device plugin never advertises `nvidia.com/mig-*`, and the simulated product is a Tesla-K80. The request KAI expects, and the quota cost of a profile, are in [mig.md](mig.md). |
 | HAMi | Needs `global.gpuSharingMode: HamiCore` and HAMi-core on a real GPU. This install is `NonMemoryEnforced`. |
 | NvFractions enforcement | The per-container annotations above are accepted for placement. The CUDA memory cap needs the gpu-fractioning runtime and a real GPU stack. |
 | MPS itself | `sm-sharing` only affects which pods share a device. There is no `nvidia-cuda-mps-control` on the kind node. |
