@@ -1,0 +1,36 @@
+# Two notebooks, each asking for 5000 MiB. Each simulated GPU is 11441 MiB
+# (deploy/fake-gpu-values.yaml), so both fit on one device and KAI holds it
+# with one reservation pod. A third 5000 MiB pod does not fit on that device
+# (15000 > 11441) and takes a second GPU.
+# Do not also set nvidia.com/gpu on these pods. Admission rejects the mix.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mem1
+  namespace: team-a
+  labels:
+    app: gpu-memory
+    kai.scheduler/queue: team-a
+  annotations:
+    gpu-memory: "5000"
+spec:
+  schedulerName: kai-scheduler
+  containers:
+    - name: notebook
+      image: registry.k8s.io/pause:3.10
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mem2
+  namespace: team-a
+  labels:
+    app: gpu-memory
+    kai.scheduler/queue: team-a
+  annotations:
+    gpu-memory: "5000"
+spec:
+  schedulerName: kai-scheduler
+  containers:
+    - name: notebook
+      image: registry.k8s.io/pause:3.10

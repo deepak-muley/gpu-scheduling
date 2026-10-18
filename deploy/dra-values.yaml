@@ -1,0 +1,16 @@
+# Optional overlay. The default install does not use this file.
+# Turn it on with: DRA=1 ./deploy/setup.sh
+#
+# fake-gpu-operator then publishes ResourceSlices for the four simulated
+# Tesla-K80s (driver gpu.nvidia.com) and one IMEX channel
+# (driver compute-domain.nvidia.com). KAI already has its dynamicresources
+# plugin loaded, so a pod with schedulerName kai-scheduler can bind a claim.
+#
+# Once those slices exist, KAI treats the worker as a DRA node and refuses
+# gpu-fraction / gpu-memory pods ("fractional/shared GPU pods are not yet
+# supported on DRA-only nodes"). Drop this file back out and re-run setup
+# before make demo.
+draPlugin:
+  enabled: true
+computeDomainDraPlugin:
+  enabled: true

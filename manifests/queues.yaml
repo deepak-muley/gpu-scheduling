@@ -1,0 +1,64 @@
+# Run:ai project with a GPU quota -> KAI Queue.
+# research is the department. team-a and team-b each deserve 2 of the 4 GPUs
+# and may borrow the rest while the other team is idle (limit: -1).
+apiVersion: scheduling.run.ai/v2
+kind: Queue
+metadata:
+  name: research
+spec:
+  displayName: Research
+  resources:
+    cpu:
+      quota: -1
+      limit: -1
+      overQuotaWeight: 1
+    memory:
+      quota: -1
+      limit: -1
+      overQuotaWeight: 1
+    gpu:
+      quota: -1
+      limit: -1
+      overQuotaWeight: 1
+---
+apiVersion: scheduling.run.ai/v2
+kind: Queue
+metadata:
+  name: team-a
+spec:
+  displayName: Team A
+  parentQueue: research
+  resources:
+    cpu:
+      quota: -1
+      limit: -1
+      overQuotaWeight: 1
+    memory:
+      quota: -1
+      limit: -1
+      overQuotaWeight: 1
+    gpu:
+      quota: 2
+      limit: -1
+      overQuotaWeight: 1
+---
+apiVersion: scheduling.run.ai/v2
+kind: Queue
+metadata:
+  name: team-b
+spec:
+  displayName: Team B
+  parentQueue: research
+  resources:
+    cpu:
+      quota: -1
+      limit: -1
+      overQuotaWeight: 1
+    memory:
+      quota: -1
+      limit: -1
+      overQuotaWeight: 1
+    gpu:
+      quota: 2
+      limit: -1
+      overQuotaWeight: 1

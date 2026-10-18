@@ -1,0 +1,15 @@
+# DRA slices are a separate install. See deploy/dra-values.yaml.
+# fake-gpu-operator still defaults this to the old Run:ai namespace (runai-reservation).
+# KAI Scheduler v0.18 creates reservation pods in kai-resource-reservation.
+# The status-updater only writes run.ai/reserve_for_gpu_index for pods in this namespace.
+environment:
+  resourceReservationNamespace: kai-resource-reservation
+
+# Stand-in for the NVIDIA GPU Operator on a machine with no GPU.
+# Four simulated devices on every node labeled run.ai/simulated-gpu-node-pool=default.
+topology:
+  nodePools:
+    default:
+      gpuProduct: Tesla-K80
+      gpuCount: 4
+      gpuMemory: 11441

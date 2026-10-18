@@ -1,0 +1,116 @@
+# Four preemptible trainings (priority class "train" = 50). Quota is 2 GPUs,
+# so the extra two run only because team-b is idle. Jobs (not bare pods) so
+# KAI can evict a pod and the Job recreates it as Pending.
+# busybox exits non-zero on SIGTERM. pause exits 0, which marks the Job complete
+# and the training never comes back after reclaim.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: a1
+  namespace: team-a
+  labels:
+    app: team-a-training
+    kai.scheduler/queue: team-a
+spec:
+  backoffLimit: 100
+  template:
+    metadata:
+      labels:
+        app: team-a-training
+        kai.scheduler/queue: team-a
+        priorityClassName: train
+    spec:
+      schedulerName: kai-scheduler
+      restartPolicy: Never
+      priorityClassName: train
+      containers:
+        - name: train
+          image: docker.io/library/busybox:1.36
+          command: ["sh", "-c", "sleep 1000000"]
+          resources:
+            limits:
+              nvidia.com/gpu: "1"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: a2
+  namespace: team-a
+  labels:
+    app: team-a-training
+    kai.scheduler/queue: team-a
+spec:
+  backoffLimit: 100
+  template:
+    metadata:
+      labels:
+        app: team-a-training
+        kai.scheduler/queue: team-a
+        priorityClassName: train
+    spec:
+      schedulerName: kai-scheduler
+      restartPolicy: Never
+      priorityClassName: train
+      containers:
+        - name: train
+          image: docker.io/library/busybox:1.36
+          command: ["sh", "-c", "sleep 1000000"]
+          resources:
+            limits:
+              nvidia.com/gpu: "1"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: a3
+  namespace: team-a
+  labels:
+    app: team-a-training
+    kai.scheduler/queue: team-a
+spec:
+  backoffLimit: 100
+  template:
+    metadata:
+      labels:
+        app: team-a-training
+        kai.scheduler/queue: team-a
+        priorityClassName: train
+    spec:
+      schedulerName: kai-scheduler
+      restartPolicy: Never
+      priorityClassName: train
+      containers:
+        - name: train
+          image: docker.io/library/busybox:1.36
+          command: ["sh", "-c", "sleep 1000000"]
+          resources:
+            limits:
+              nvidia.com/gpu: "1"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: a4
+  namespace: team-a
+  labels:
+    app: team-a-training
+    kai.scheduler/queue: team-a
+spec:
+  backoffLimit: 100
+  template:
+    metadata:
+      labels:
+        app: team-a-training
+        kai.scheduler/queue: team-a
+        priorityClassName: train
+    spec:
+      schedulerName: kai-scheduler
+      restartPolicy: Never
+      priorityClassName: train
+      containers:
+        - name: train
+          image: docker.io/library/busybox:1.36
+          command: ["sh", "-c", "sleep 1000000"]
+          resources:
+            limits:
+              nvidia.com/gpu: "1"

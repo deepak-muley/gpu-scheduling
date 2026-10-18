@@ -1,0 +1,37 @@
+# Two notebooks, each asking for half a GPU. KAI should place both on one
+# device and hold that device with a single reservation pod.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nb1
+  namespace: team-a
+  labels:
+    app: shared-notebook
+    kai.scheduler/queue: team-a
+    priorityClassName: build
+  annotations:
+    gpu-fraction: "0.5"
+spec:
+  schedulerName: kai-scheduler
+  priorityClassName: build
+  containers:
+    - name: notebook
+      image: registry.k8s.io/pause:3.10
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nb2
+  namespace: team-a
+  labels:
+    app: shared-notebook
+    kai.scheduler/queue: team-a
+    priorityClassName: build
+  annotations:
+    gpu-fraction: "0.5"
+spec:
+  schedulerName: kai-scheduler
+  priorityClassName: build
+  containers:
+    - name: notebook
+      image: registry.k8s.io/pause:3.10

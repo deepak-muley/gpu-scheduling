@@ -1,0 +1,5 @@
+# KAI is the scheduler Run:ai installs in the cluster.
+# NonMemoryEnforced places fractional GPU pods and holds the device with a
+# reservation pod. It does not isolate GPU memory at runtime (no HAMi / NvFractions).
+global:
+  gpuSharingMode: NonMemoryEnforced

@@ -1,0 +1,37 @@
+# One exclusive GPU via Dynamic Resource Allocation.
+# Requires DRA=1 ./deploy/setup.sh. The claim template names DeviceClass
+# gpu.nvidia.com, which the fake DRA plugin publishes. KAI binds the claim
+# and accounts it as gpu.nvidia.com, which is not the queue's gpu quota.
+# See docs/mechanisms.md.
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: one-gpu
+  namespace: team-a
+spec:
+  spec:
+    devices:
+      requests:
+        - name: gpu
+          exactly:
+            deviceClassName: gpu.nvidia.com
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dra1
+  namespace: team-a
+  labels:
+    app: dra-gpu
+    kai.scheduler/queue: team-a
+spec:
+  schedulerName: kai-scheduler
+  resourceClaims:
+    - name: gpu
+      resourceClaimTemplateName: one-gpu
+  containers:
+    - name: main
+      image: registry.k8s.io/pause:3.10
+      resources:
+        claims:
+          - name: gpu

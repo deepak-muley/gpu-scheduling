@@ -1,0 +1,56 @@
+# Two pods, one ResourceClaim, one simulated GPU.
+# A claim used by more than one pod must carry kai.scheduler/queue.
+# Without that label KAI leaves both pods Pending.
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaim
+metadata:
+  name: shared-gpu
+  namespace: team-a
+  labels:
+    kai.scheduler/queue: team-a
+spec:
+  devices:
+    requests:
+      - name: gpu
+        exactly:
+          deviceClassName: gpu.nvidia.com
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: share-a
+  namespace: team-a
+  labels:
+    app: dra-shared
+    kai.scheduler/queue: team-a
+spec:
+  schedulerName: kai-scheduler
+  resourceClaims:
+    - name: gpu
+      resourceClaimName: shared-gpu
+  containers:
+    - name: main
+      image: registry.k8s.io/pause:3.10
+      resources:
+        claims:
+          - name: gpu
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: share-b
+  namespace: team-a
+  labels:
+    app: dra-shared
+    kai.scheduler/queue: team-a
+spec:
+  schedulerName: kai-scheduler
+  resourceClaims:
+    - name: gpu
+      resourceClaimName: shared-gpu
+  containers:
+    - name: main
+      image: registry.k8s.io/pause:3.10
+      resources:
+        claims:
+          - name: gpu

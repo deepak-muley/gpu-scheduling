@@ -1,0 +1,8 @@
+# Same-cluster lab: one control plane and one worker.
+# Fake GPUs are advertised only on the worker (see deploy/setup.sh).
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: gpu-sharing
+nodes:
+  - role: control-plane
+  - role: worker

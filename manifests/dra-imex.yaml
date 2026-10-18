@@ -1,0 +1,35 @@
+# IMEX channel for a one-node ComputeDomain. The fake compute-domain plugin
+# publishes a single channel device. The controller creates ResourceClaimTemplate
+# imex-channel from this object; apply the file again if the pod is rejected
+# because that template did not exist yet.
+apiVersion: resource.nvidia.com/v1beta1
+kind: ComputeDomain
+metadata:
+  name: imex
+  namespace: team-a
+spec:
+  numNodes: 1
+  channel:
+    allocationMode: Single
+    resourceClaimTemplate:
+      name: imex-channel
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: imex-pod
+  namespace: team-a
+  labels:
+    app: dra-imex
+    kai.scheduler/queue: team-a
+spec:
+  schedulerName: kai-scheduler
+  resourceClaims:
+    - name: channel
+      resourceClaimTemplateName: imex-channel
+  containers:
+    - name: main
+      image: registry.k8s.io/pause:3.10
+      resources:
+        claims:
+          - name: channel

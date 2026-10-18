@@ -1,0 +1,19 @@
+# Half of each of two GPUs. KAI writes nvidia.com/container.notebook.gpu-memory.request
+# as half the device (5720Mi on these 11441 MiB GPUs) and holds both devices
+# with a reservation pod each.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: two-dev
+  namespace: team-a
+  labels:
+    app: fraction-two-devices
+    kai.scheduler/queue: team-a
+  annotations:
+    gpu-fraction: "0.5"
+    gpu-fraction-num-devices: "2"
+spec:
+  schedulerName: kai-scheduler
+  containers:
+    - name: notebook
+      image: registry.k8s.io/pause:3.10

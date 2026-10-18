@@ -1,0 +1,38 @@
+# Pods that share a GPU must ask for the same compute mode. time-slicing is
+# the default. sm-sharing is KAI's name for MPS-style concurrent sharing.
+# These two ask for different modes, so they land on different GPUs
+# (two reservation pods). This cluster has no MPS daemon; the annotation
+# only changes placement.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: slice
+  namespace: team-a
+  labels:
+    app: compute-mode
+    kai.scheduler/queue: team-a
+  annotations:
+    gpu-fraction: "0.5"
+    nvidia.com/container.notebook.gpu-compute.mode: time-slicing
+spec:
+  schedulerName: kai-scheduler
+  containers:
+    - name: notebook
+      image: registry.k8s.io/pause:3.10
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sm
+  namespace: team-a
+  labels:
+    app: compute-mode
+    kai.scheduler/queue: team-a
+  annotations:
+    gpu-fraction: "0.5"
+    nvidia.com/container.notebook.gpu-compute.mode: sm-sharing
+spec:
+  schedulerName: kai-scheduler
+  containers:
+    - name: notebook
+      image: registry.k8s.io/pause:3.10

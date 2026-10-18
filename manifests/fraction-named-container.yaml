@@ -1,0 +1,20 @@
+# gpu-fraction applies to the first container unless gpu-fraction-container-name
+# says otherwise. Here the sidecar is first and the notebook receives the share.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: named
+  namespace: team-a
+  labels:
+    app: named-fraction
+    kai.scheduler/queue: team-a
+  annotations:
+    gpu-fraction: "0.5"
+    gpu-fraction-container-name: notebook
+spec:
+  schedulerName: kai-scheduler
+  containers:
+    - name: sidecar
+      image: registry.k8s.io/pause:3.10
+    - name: notebook
+      image: registry.k8s.io/pause:3.10

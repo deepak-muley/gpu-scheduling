@@ -1,0 +1,29 @@
+# team-b is under its quota of 2, so this job must be scheduled even when
+# team-a is borrowing every GPU. KAI reclaims one over-quota team-a pod.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: b1
+  namespace: team-b
+  labels:
+    app: team-b-training
+    kai.scheduler/queue: team-b
+spec:
+  backoffLimit: 100
+  template:
+    metadata:
+      labels:
+        app: team-b-training
+        kai.scheduler/queue: team-b
+        priorityClassName: train
+    spec:
+      schedulerName: kai-scheduler
+      restartPolicy: Never
+      priorityClassName: train
+      containers:
+        - name: train
+          image: docker.io/library/busybox:1.36
+          command: ["sh", "-c", "sleep 1000000"]
+          resources:
+            limits:
+              nvidia.com/gpu: "1"

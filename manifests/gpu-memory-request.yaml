@@ -1,0 +1,19 @@
+# Per-container memory request. The key names the container.
+# request is what KAI packs onto a device. limit may be higher; on this
+# cluster nothing enforces that cap inside the container (see docs/mechanisms.md).
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mem-req
+  namespace: team-a
+  labels:
+    app: gpu-memory-request
+    kai.scheduler/queue: team-a
+  annotations:
+    nvidia.com/container.notebook.gpu-memory.request: 2048Mi
+    nvidia.com/container.notebook.gpu-memory.limit: 4096Mi
+spec:
+  schedulerName: kai-scheduler
+  containers:
+    - name: notebook
+      image: registry.k8s.io/pause:3.10
